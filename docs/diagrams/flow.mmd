@@ -1,0 +1,15 @@
+sequenceDiagram
+  participant P as Postman
+  participant R as Route
+  participant C as Controller
+  participant M as Mongoose Model
+  participant D as MongoDB
+  P->>R: GET /api/destinations/discover?category=Beach&sort=price
+  R->>C: discoverDestinations()
+  C->>C: validate and build filter, sort, page
+  C->>M: find(filter).sort().skip().limit()
+  M->>D: query destinations
+  D-->>M: matching documents
+  C->>M: countDocuments(filter)
+  M-->>C: total
+  C-->>P: 200 { success, page, total, data }

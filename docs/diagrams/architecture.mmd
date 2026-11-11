@@ -1,0 +1,14 @@
+flowchart LR
+  C["Postman / Client"] -->|"HTTP request"| S["server.js<br/>Express app"]
+  S --> R["routes/<br/>destinationRoutes.js"]
+  R --> CT["controllers/<br/>destinationController.js"]
+  CT --> M["models/<br/>Destination.js (Mongoose)"]
+  M --> DB[("MongoDB<br/>destiny_travels.destinations")]
+  CFG["config/db.js"] -.->|"connects"| DB
+  CT -.->|"errors"| E["middleware/<br/>errorHandler.js"]
+  E -->|"JSON error + status code"| C
+  CT -->|"JSON response"| C
+  classDef box fill:#EAF2FB,stroke:#1F4E79,color:#10243E;
+  classDef db fill:#E8F5E9,stroke:#2E7D32,color:#10243E;
+  class C,S,R,CT,M,E,CFG box;
+  class DB db;

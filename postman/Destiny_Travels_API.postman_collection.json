@@ -1,0 +1,882 @@
+{
+  "info": {
+    "name": "Destiny Travels API",
+    "description": "Postman tests for the Destiny Travels API (Express.js + MongoDB + Mongoose).\nRun the folders in order, or use the Collection Runner: requests build on each other.\nRun `npm run seed` first for a clean database, or let request 02 insert the sample data.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "destinationId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Challenge 01: Add Destinations",
+      "item": [
+        {
+          "name": "01 - Add a single destination",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test('Response is JSON with success = true', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(true);",
+                  "});",
+                  "// Remember the new document's _id for the ID-based requests that follow",
+                  "pm.collectionVariables.set('destinationId', pm.response.json().data._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations"
+              ]
+            },
+            "description": "Creates one destination and returns the saved document.\n\nMongoose: create()",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Kashmir Valley\",\n  \"location\": \"Jammu and Kashmir, India\",\n  \"category\": \"Hill Station\",\n  \"price\": 26000,\n  \"rating\": 4.8,\n  \"duration\": 5,\n  \"bestSeason\": \"April - October\",\n  \"description\": \"Dal Lake houseboats, Gulmarg meadows and snow-capped peaks.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "02 - Add many destinations at once",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "pm.test('Response is JSON with success = true', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations/bulk",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations",
+                "bulk"
+              ]
+            },
+            "description": "Inserts an array of destinations in one database call.\n\nMongoose: insertMany()",
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"name\": \"Goa Beaches\",\n    \"location\": \"Goa, India\",\n    \"category\": \"Beach\",\n    \"price\": 12000,\n    \"rating\": 4.5,\n    \"duration\": 4,\n    \"bestSeason\": \"November - February\",\n    \"description\": \"Sun, sand and nightlife along the Arabian Sea coast.\"\n  },\n  {\n    \"name\": \"Andaman Islands\",\n    \"location\": \"Andaman and Nicobar, India\",\n    \"category\": \"Beach\",\n    \"price\": 38000,\n    \"rating\": 4.8,\n    \"duration\": 6,\n    \"bestSeason\": \"October - May\",\n    \"description\": \"Crystal-clear water, coral reefs and scuba diving.\"\n  },\n  {\n    \"name\": \"Gokarna Coast\",\n    \"location\": \"Karnataka, India\",\n    \"category\": \"Beach\",\n    \"price\": 6500,\n    \"rating\": 4.2,\n    \"duration\": 3,\n    \"bestSeason\": \"October - March\",\n    \"description\": \"Quiet beaches and coastal trekking trails.\"\n  },\n  {\n    \"name\": \"Munnar\",\n    \"location\": \"Kerala, India\",\n    \"category\": \"Hill Station\",\n    \"price\": 9500,\n    \"rating\": 4.6,\n    \"duration\": 3,\n    \"bestSeason\": \"September - March\",\n    \"description\": \"Endless tea plantations and misty hills.\"\n  },\n  {\n    \"name\": \"Darjeeling\",\n    \"location\": \"West Bengal, India\",\n    \"category\": \"Hill Station\",\n    \"price\": 14000,\n    \"rating\": 4.4,\n    \"duration\": 4,\n    \"bestSeason\": \"March - May\",\n    \"description\": \"Toy train rides and views of Kanchenjunga.\"\n  },\n  {\n    \"name\": \"Jaipur City Palace\",\n    \"location\": \"Rajasthan, India\",\n    \"category\": \"Heritage\",\n    \"price\": 11000,\n    \"rating\": 4.3,\n    \"duration\": 3,\n    \"bestSeason\": \"October - March\",\n    \"description\": \"Forts, palaces and bazaars of the Pink City.\"\n  },\n  {\n    \"name\": \"Hampi\",\n    \"location\": \"Karnataka, India\",\n    \"category\": \"Heritage\",\n    \"price\": 5500,\n    \"rating\": 4.7,\n    \"duration\": 2,\n    \"bestSeason\": \"October - February\",\n    \"description\": \"UNESCO ruins of the Vijayanagara Empire.\"\n  },\n  {\n    \"name\": \"Leh Ladakh\",\n    \"location\": \"Ladakh, India\",\n    \"category\": \"Adventure\",\n    \"price\": 32000,\n    \"rating\": 4.9,\n    \"duration\": 7,\n    \"bestSeason\": \"June - September\",\n    \"description\": \"High-altitude passes, monasteries and road trips.\"\n  },\n  {\n    \"name\": \"Rishikesh Rafting\",\n    \"location\": \"Uttarakhand, India\",\n    \"category\": \"Adventure\",\n    \"price\": 7000,\n    \"rating\": 4.1,\n    \"duration\": 3,\n    \"bestSeason\": \"September - June\",\n    \"description\": \"White-water rafting, bungee jumping and yoga.\"\n  },\n  {\n    \"name\": \"Jim Corbett National Park\",\n    \"location\": \"Uttarakhand, India\",\n    \"category\": \"Wildlife\",\n    \"price\": 10500,\n    \"rating\": 4,\n    \"duration\": 3,\n    \"bestSeason\": \"November - June\",\n    \"description\": \"Tiger reserve with jeep safaris through the forest.\"\n  },\n  {\n    \"name\": \"Varanasi Ghats\",\n    \"location\": \"Uttar Pradesh, India\",\n    \"category\": \"Spiritual\",\n    \"price\": 8000,\n    \"rating\": 4.5,\n    \"duration\": 3,\n    \"bestSeason\": \"October - March\",\n    \"description\": \"Evening Ganga aarti and ancient temples.\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Challenge 02: Retrieve Destinations",
+      "item": [
+        {
+          "name": "03 - Retrieve all destinations",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response is JSON with success = true', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations"
+              ]
+            },
+            "description": "Returns every document in the destinations collection.\n\nMongoose: find()"
+          },
+          "response": []
+        },
+        {
+          "name": "04 - Retrieve a destination by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response is JSON with success = true', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations/{{destinationId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations",
+                "{{destinationId}}"
+              ]
+            },
+            "description": "Looks up one destination by its MongoDB _id.\n\nMongoose: findById()"
+          },
+          "response": []
+        },
+        {
+          "name": "05 - Retrieve a destination by name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response is JSON with success = true', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations/name/Goa%20Beaches",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations",
+                "name",
+                "Goa Beaches"
+              ]
+            },
+            "description": "Finds the first destination whose name matches (case-insensitive).\n\nMongoose: findOne()"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Challenge 03: Update Destinations",
+      "item": [
+        {
+          "name": "06 - Update a destination by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response is JSON with success = true', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations/{{destinationId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations",
+                "{{destinationId}}"
+              ]
+            },
+            "description": "Changes only the fields sent and returns the updated document.\n\nMongoose: findByIdAndUpdate()",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 27500,\n  \"rating\": 4.9\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "07 - Update a destination by name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response is JSON with success = true', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations/name/Hampi",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations",
+                "name",
+                "Hampi"
+              ]
+            },
+            "description": "Updates the destination that matches the name in the URL.\n\nMongoose: findOneAndUpdate()",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 6000,\n  \"bestSeason\": \"October - March\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Challenge 04: Smart Destination Discovery",
+      "item": [
+        {
+          "name": "08 - Smart discovery: filter, sort and paginate (page 1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response is JSON with success = true', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations/discover?category=Beach&minPrice=5000&maxPrice=40000&sort=price,-rating&page=1&limit=2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations",
+                "discover"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Beach"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "5000"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "40000"
+                },
+                {
+                  "key": "sort",
+                  "value": "price,-rating"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "Beach destinations priced 5,000-40,000, cheapest first (ties by best rating), 2 per page.\n\nMongoose: find().sort().skip().limit() + countDocuments()"
+          },
+          "response": []
+        },
+        {
+          "name": "09 - Smart discovery: page 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response is JSON with success = true', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations/discover?category=Beach&minPrice=5000&maxPrice=40000&sort=price,-rating&page=2&limit=2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations",
+                "discover"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Beach"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "5000"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "40000"
+                },
+                {
+                  "key": "sort",
+                  "value": "price,-rating"
+                },
+                {
+                  "key": "page",
+                  "value": "2"
+                },
+                {
+                  "key": "limit",
+                  "value": "2"
+                }
+              ]
+            },
+            "description": "skip((page - 1) x limit) moves to the next page of the same result set.\n\nMongoose: skip() + limit()"
+          },
+          "response": []
+        },
+        {
+          "name": "10 - Retrieve unique categories",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response is JSON with success = true', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations/categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations",
+                "categories"
+              ]
+            },
+            "description": "Returns each category once, sorted alphabetically.\n\nMongoose: distinct()"
+          },
+          "response": []
+        },
+        {
+          "name": "11 - Count destinations",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response is JSON with success = true', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations/count?category=Beach",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations",
+                "count"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Beach"
+                }
+              ]
+            },
+            "description": "Counts documents that match the optional filters (here: category = Beach).\n\nMongoose: countDocuments()"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Challenge 05: Destination Cleanup",
+      "item": [
+        {
+          "name": "12 - Delete a destination by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response is JSON with success = true', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations/{{destinationId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations",
+                "{{destinationId}}"
+              ]
+            },
+            "description": "Removes one destination and returns the document that was deleted.\n\nMongoose: findByIdAndDelete()"
+          },
+          "response": []
+        },
+        {
+          "name": "13 - Delete a destination by name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response is JSON with success = true', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations/name/Jim%20Corbett%20National%20Park",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations",
+                "name",
+                "Jim Corbett National Park"
+              ]
+            },
+            "description": "Removes the destination whose name matches and returns it.\n\nMongoose: findOneAndDelete()"
+          },
+          "response": []
+        },
+        {
+          "name": "14 - Delete multiple destinations by condition",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response is JSON with success = true', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations/bulk?maxPrice=6500",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations",
+                "bulk"
+              ],
+              "query": [
+                {
+                  "key": "maxPrice",
+                  "value": "6500"
+                }
+              ]
+            },
+            "description": "Deletes every destination priced at 6,500 or less (Gokarna Coast and Hampi in the sample data).\n\nMongoose: deleteMany()"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Error Handling Checks",
+      "item": [
+        {
+          "name": "15 - Invalid ID format returns 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 400', function () {",
+                  "  pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test('Response is JSON with success = false', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(false);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations/12345",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations",
+                "12345"
+              ]
+            },
+            "description": "A malformed ObjectId is rejected before the database is queried."
+          },
+          "response": []
+        },
+        {
+          "name": "16 - Unknown ID returns 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 404', function () {",
+                  "  pm.response.to.have.status(404);",
+                  "});",
+                  "pm.test('Response is JSON with success = false', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(false);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations/64b7f0c2a1b2c3d4e5f6a7b8",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations",
+                "64b7f0c2a1b2c3d4e5f6a7b8"
+              ]
+            },
+            "description": "A well-formed ID that matches no document."
+          },
+          "response": []
+        },
+        {
+          "name": "17 - Invalid data returns 400 with details",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 400', function () {",
+                  "  pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test('Response is JSON with success = false', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(false);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations"
+              ]
+            },
+            "description": "Schema validation lists every problem found in the body.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"X\",\n  \"category\": \"Space\",\n  \"price\": -100\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "18 - Duplicate name returns 409",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 409', function () {",
+                  "  pm.response.to.have.status(409);",
+                  "});",
+                  "pm.test('Response is JSON with success = false', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(false);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations"
+              ]
+            },
+            "description": "The unique index on name blocks a second \"Goa Beaches\".",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Goa Beaches\",\n  \"location\": \"Goa, India\",\n  \"category\": \"Beach\",\n  \"price\": 12000,\n  \"rating\": 4.5,\n  \"duration\": 4,\n  \"bestSeason\": \"November - February\",\n  \"description\": \"Sun, sand and nightlife along the Arabian Sea coast.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "19 - Bulk delete without a condition returns 400",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 400', function () {",
+                  "  pm.response.to.have.status(400);",
+                  "});",
+                  "pm.test('Response is JSON with success = false', function () {",
+                  "  pm.expect(pm.response.json().success).to.eql(false);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/destinations/bulk",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "destinations",
+                "bulk"
+              ]
+            },
+            "description": "Protects the collection from an accidental \"delete everything\" call."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
